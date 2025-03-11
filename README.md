@@ -6,5 +6,5 @@
 **実行にはPythonが必要です。** Windowsを利用している場合MinecraftストアからDLすることをおすすめします。(簡単です)
 
   
-<img src="sample.png" width="700">
+<img src="sample_2.png" width="700">
 
