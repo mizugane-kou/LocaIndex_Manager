@@ -436,9 +436,11 @@ class MapMakerApp:
 
     def delete_current_pin(self):
         if self.current_pin and messagebox.askyesno("確認", "このピンを削除しますか？"):
+            if "marker_id" in self.current_pin:
+                self.canvas.delete(self.current_pin["marker_id"])
+            if "text_id" in self.current_pin:
+                self.canvas.delete(self.current_pin["text_id"])
             self.pins.remove(self.current_pin)
-            self.canvas.delete(self.current_pin["marker_id"])
-            self.canvas.delete(self.current_pin["text_id"])
             self.current_pin = None
             self.detail_text.config(state="normal")
             self.detail_text.delete("1.0", tk.END)
@@ -446,6 +448,7 @@ class MapMakerApp:
             self.edit_button.pack_forget()
             self.delete_button.pack_forget()
             self.update_pin_list()
+            self.draw_map()
 
     def show_pin_input_new(self):
         self.editing_pin = None
