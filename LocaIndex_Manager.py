@@ -88,6 +88,7 @@ class MapMakerApp:
         top_frame = ttk.Frame(self.root)
         top_frame.pack(side=tk.TOP, fill=tk.X)
         ttk.Button(top_frame, text="マップデータを開く", command=self.load_data).pack(side=tk.LEFT, padx=5)
+        ttk.Button(top_frame, text="マップの再読込み", command=self.reload_map).pack(side=tk.LEFT, padx=5)
         ttk.Button(top_frame, text="保存", command=self.save_data).pack(side=tk.LEFT, padx=5)
         ttk.Button(top_frame, text="保存して閉じる", command=self.save_and_close).pack(side=tk.LEFT, padx=5)
         ttk.Button(top_frame, text="背景画像設定", command=self.set_bg_image).pack(side=tk.LEFT, padx=5)
@@ -312,9 +313,6 @@ class MapMakerApp:
                     self.canvas.create_line([(x - self.eff_width, y) for (x, y) in pts],
                                             fill="blue", dash=(4, 4))
 
-
-
-
     def draw_pin(self, pin):
         base_x = self.lon_to_x(pin["lon"])  # ここではモジュロ演算を使わない
         y = self.lat_to_y(pin["lat"])
@@ -325,7 +323,6 @@ class MapMakerApp:
             self.canvas.create_polygon(pts, fill="black", outline="black", tags="pin")
             pin_color = pin.get("color", DEFAULT_PIN_COLOR)
             self.canvas.create_text(x, y - 4, text=pin["name"], fill=pin_color, tags="pin", anchor="s")
-
 
     def update_pin_preview(self):
         self.canvas.delete("preview_pin")
@@ -344,7 +341,6 @@ class MapMakerApp:
             x = base_x + dx
             pts = [x - 3, y - 4, x + 3, y - 4, x, y]
             self.canvas.create_polygon(pts, fill="red", outline="red", tags="preview_pin")
-
 
     def on_canvas_press(self, event):
         self.drag_start = event.x
@@ -613,11 +609,10 @@ class MapMakerApp:
         self.root.destroy()
 
 
-
-
-
-
-
+    def reload_map(self):
+        # 背景画像フォルダから再読込みし、再描画する
+        self.load_bg_image_from_folder()
+        self.draw_map()
 
 
     def generate_map_image(self):
